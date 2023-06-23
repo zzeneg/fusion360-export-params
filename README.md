@@ -28,7 +28,7 @@ In Fusion 360 you can define your own parameters and use them in your sketches/b
 ## Usage
 Create a model that uses parameters, then create a CSV file with mappings - first column is the component or body name, second is the parameter name used in that component/body, and next columns are parameter values in the form of expressions (e.g. number + unit).
 
-For example, imagine we have a design `ExportParamsSample` where bodies in the root component uses parameters `modelSize` and `modelHeight`, and the `ChildComponent` uses `childModelWidth` parameter. We also have a `SingleBody` which is specifies as a body in the CSV, not as a component
+For example, imagine we have a design `ExportParamsSample` where bodies in the root component uses parameters `modelSize` and `modelHeight`, and the `ChildComponent` uses `childModelWidth` parameter. We also have a `SingleBody` which is specified as a body in the CSV, not as a component.
 
 ![image](https://github.com/zzeneg/fusion360-export-params/assets/910255/a22cd988-7e2a-4ec7-bcfa-9ed93968d769)
 
