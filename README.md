@@ -26,17 +26,19 @@ In Fusion 360 you can define your own parameters and use them in your sketches/b
 
 
 ## Usage
-Create a model that uses parameters, then create a CSV file with mappings - first column is the component name, second is the parameter name used in that component, and next columns are parameter values in the form of expressions (e.g. number + unit).
+Create a model that uses parameters, then create a CSV file with mappings - first column is the component or body name, second is the parameter name used in that component/body, and next columns are parameter values in the form of expressions (e.g. number + unit).
 
-For example, imagine we have a design `ExportParamsSample` where bodies in the root component uses parameters `modelSize` and `modelHeight`, and the `ChildComponent` uses `childModelWidth` parameter.
+For example, imagine we have a design `ExportParamsSample` where bodies in the root component uses parameters `modelSize` and `modelHeight`, and the `ChildComponent` uses `childModelWidth` parameter. We also have a `SingleBody` which is specifies as a body in the CSV, not as a component
 
-![image](https://github.com/zzeneg/fusion360-export-params/assets/910255/0741dbe4-9d61-4c01-9bda-5bf096e28f50)
+![image](https://github.com/zzeneg/fusion360-export-params/assets/910255/a22cd988-7e2a-4ec7-bcfa-9ed93968d769)
+
 
 In that case our CSV file may look like this:
 ```
 ExportParamsSample, modelHeight, 20mm, 50mm
 ExportParamsSample, modelSize, 50mm, 100mm
 ChildComponent, childModelWidth, 20mm, 50mm, 100mm
+SingleBody, modelSize, 50mm, 100mm
 ```
 `v1` suffix in the root component's name is ignored as it changes all the time.
 
@@ -53,7 +55,8 @@ If a component is not in CSV (e.g. it doesn't use parameters) it still will be e
 
 With our sample results would be:
 
-![image](https://github.com/zzeneg/fusion360-export-params/assets/910255/e4289f4e-eafb-419c-aba0-2a5301f6f7f0)
+![image](https://github.com/zzeneg/fusion360-export-params/assets/910255/fd464f45-cd2c-42b8-8cc2-b57a09307865)
+
 
 ## Credits
 <a href="https://www.flaticon.com/free-icons/stl" title="stl icons">STL icons created by Freepik - Flaticon</a>
