@@ -1,4 +1,5 @@
 from itertools import product
+import re
 import adsk.core
 import adsk.fusion
 import os
@@ -94,11 +95,11 @@ def command_execute(args: adsk.core.CommandEventArgs):
     global _csvPath, _exportPath, _meshRefinement
 
     design = adsk.fusion.Design.cast(_app.activeProduct)
-    bodies = getBodies(design.rootComponent.allOccurrences, [])
-    util.log("BODIES: " + str(list(map(lambda x: f"{x[0].name} ({x[1]})", bodies))))
+    bodies = getBodies(design.rootComponent, [])
+    util.log("BODIES: " + str(list(map(lambda x: f"{x[1]}_{x[0].name}", bodies))), force_console=True)
 
     csvValues = parseCsv(_csvPath)
-    util.log("CSV COMBINATIONS: " + str(csvValues))
+    util.log("CSV COMBINATIONS: " + str(csvValues), force_console=True)
 
     for body, componentName in bodies:
         exportBody(body, componentName, csvValues.get(componentName), _exportPath, _meshRefinement)
@@ -177,13 +178,15 @@ def parseCsv(csvPath: str) -> dict[str, list[tuple[tuple[str, str], ...]]]:
     return csvValueCombinations
 
 
-def getBodies(occurrences: list[adsk.fusion.Occurrence], bodies: list[adsk.fusion.BRepBody]) -> list[tuple[adsk.fusion.BRepBody, str]]:
-    for occurrence in occurrences:
+def getBodies(component: adsk.fusion.Component, bodies: list[adsk.fusion.BRepBody]) -> list[tuple[adsk.fusion.BRepBody, str]]:
+    if component.isBodiesFolderLightBulbOn:
+        for body in component.bRepBodies:
+            if body.isLightBulbOn:
+                sanitizedName = re.sub(r" v\d$", "", component.name).strip()
+                bodies.append((body, sanitizedName))
+    for occurrence in component.occurrences:
         if occurrence.isLightBulbOn and not occurrence.isReferencedComponent:
-            bodies = getBodies(occurrence.childOccurrences, bodies)
-            for body in occurrence.bRepBodies:
-                if body.isLightBulbOn:
-                    bodies.append((body, occurrence.component.name))
+            bodies = getBodies(occurrence.component, bodies)
 
     return bodies
 
