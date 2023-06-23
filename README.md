@@ -49,6 +49,8 @@ AFter creating a CSV click an Add-In button in the UI and select
 
 Similar to default STL export, only visible bodies will be exported.
 
+If a component is not in CSV (e.g. it doesn't use parameters) it still will be exported.
+
 With our sample results would be:
 
 ![image](https://github.com/zzeneg/fusion360-export-params/assets/910255/e4289f4e-eafb-419c-aba0-2a5301f6f7f0)
