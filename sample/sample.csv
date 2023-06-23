@@ -1,3 +1,4 @@
 ExportParamsSample, modelHeight, 20mm, 50mm
 ExportParamsSample, modelSize, 50mm, 100mm
 ChildComponent, childModelWidth, 20mm, 50mm, 100mm
+SingleBody, modelSize, 50mm, 100mm

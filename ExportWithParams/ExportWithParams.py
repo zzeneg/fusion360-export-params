@@ -102,7 +102,7 @@ def command_execute(args: adsk.core.CommandEventArgs):
     util.log("CSV COMBINATIONS: " + str(csvValues), force_console=True)
 
     for body, componentName in bodies:
-        exportBody(body, componentName, csvValues.get(componentName), _exportPath, _meshRefinement)
+        exportBody(body, componentName, csvValues, _exportPath, _meshRefinement)
 
 
 def command_input_changed(args: adsk.core.InputChangedEventArgs):
@@ -192,7 +192,11 @@ def getBodies(component: adsk.fusion.Component, bodies: list[adsk.fusion.BRepBod
 
 
 def exportBody(
-    body: adsk.fusion.BRepBody, componentName: str, paramCombinations: list[tuple[tuple[str, str], ...]], folder: str, meshRefinement: int
+    body: adsk.fusion.BRepBody,
+    componentName: str,
+    allCombinations: dict[list[tuple[tuple[str, str], ...]]],
+    folder: str,
+    meshRefinement: int,
 ):
     design = adsk.fusion.Design.cast(_app.activeProduct)
     exportManager = design.exportManager
@@ -201,10 +205,14 @@ def exportBody(
     stlOptions = exportManager.createSTLExportOptions(body)
     stlOptions.meshRefinement = meshRefinement
 
+    bodyCombinations = allCombinations.get(componentName)
+    if bodyCombinations is None:
+        bodyCombinations = allCombinations.get(body.name)
+
     changedParameters = {}
-    if paramCombinations is not None:
-        util.log(f"EXPORT BODY WITH PARAMS: {componentName}_{body.name} - {str(paramCombinations)}", force_console=True)
-        for paramCombination in paramCombinations:
+    if bodyCombinations is not None:
+        util.log(f"EXPORT BODY WITH PARAMS: {componentName}_{body.name} - {str(bodyCombinations)}", force_console=True)
+        for paramCombination in bodyCombinations:
             fileName = f"{componentName}_{body.name}"
             for param in paramCombination:
                 paramName = param[0]
